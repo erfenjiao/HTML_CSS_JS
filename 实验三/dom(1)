@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单验证</title>
+
+    <style type="text/css">
+        span {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+     <link rel = "stylesheet" href = "login.css">
+     <script>
+        check()
+        {
+            if (username != "" && password != "")
+            {
+                return true;
+            }
+        }
+     </script>
+</head>
+<!--
+（1用户名不能为空
+（2用户名必须在6-14位之间
+（3用户名只能数字和字母组成，不能含其它符号（正则表达式
+（4密码和确认密码一致，邮箱地址合法。
+（5统一失去焦点验证
+（6错误提示信息统一在span标签中提示，并且要求字体12号，红色。
+（7文本框再次获得焦点后，清空错误提示信息，如果文本框中数据不合法要求清空文本框的value
+（8最终表单中所有项均合法方可提交
+-->
+<body>
+<script type="text/javascript">
+
+
+    window.onload = function () {
+
+        var usernameObj = document.getElementById("username");
+        var usernameError = document.getElementById("error");
+        var passwordObj = document.getElementById("password");
+        var passwordError = document.getElementById("error1");
+        var passwordObj1 = document.getElementById("password1");
+        var passwordError1 = document.getElementById("error2");
+        var emailObj = document.getElementById("email");
+        var emailError = document.getElementById("error3");
+
+        usernameObj.onblur = function () {
+            console.log("失去焦点");
+            //保证用户名合法
+            var username = usernameObj.value;
+            username = username.trim();
+            var usernameValue = /^[0-9a-zA-Z]{6,14}$/
+            if (username === "") {
+                usernameError.innerText = "用户名不能为空!";
+            } else if (!(usernameValue.test(username))) {
+                usernameError.innerText = "用户名必须在6-14位之间," +
+                    "并且只能数字和字母组成，不能含其它符号";
+            }
+
+        }
+        //用户名得到焦点
+        usernameObj.onfocus = function () {
+            if (usernameError.innerText != "") {
+                usernameObj.value = "";
+            }
+            usernameError.innerText = "";
+        }
+
+        //保证密码合法
+        passwordObj.onblur = function () {
+            console.log("失去焦点");
+            var password = passwordObj.value;
+            password = password.trim();
+            if (password === "") {
+                passwordError.innerText = "密码不能为空";
+            }
+
+        }
+        passwordObj.onfocus = function () {
+            if (passwordError.innerText != "") {
+                passwordObj.value = "";
+            }
+            passwordError.innerText = "";
+        }
+        //保证确认密码合法
+        passwordObj1.onblur = function () {
+            console.log("失去焦点");
+            var password1 = passwordObj1.value;
+            var password = passwordObj.value;
+            password = password.trim();
+            password1 = password1.trim();
+            if (!(password === password1)) {
+                passwordError1.innerText = "输入密码不一致";
+            }
+
+        }
+        passwordObj1.onfocus = function () {
+            if (passwordError1.innerText != "") {
+                passwordObj1.value = "";
+            }
+            passwordError1.innerText = "";
+        }
+
+        //保证邮箱合法
+        emailObj.onblur = function () {
+            console.log("失去焦点");
+            //保证用户名合法
+            var email = emailObj.value;
+            email = email.trim();
+            var emailValue = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+            if (email === "") {
+                emailError.innerText = "邮箱不能为空!";
+            } else if (!(emailValue.test(email))) {
+                emailError.innerText = "邮箱地址不合法";
+            }
+        }
+
+
+        emailObj.onfocus = function () {
+            if (emailError.innerText != "") {
+                emailObj.value = "";
+            }
+            emailError.innerText = "";
+        }
+        // 给提交钮绑定鼠标单击事件
+        document.getElementById("btn1").onclick = function () {
+            // 触发username的blur userpwd2的blur email的blur
+            // 不需要人工操作,使用纯JS代码触发事件.
+            usernameObj.focus();
+            usernameObj.blur();
+
+            passwordObj.focus();
+            passwordObj.blur();
+
+            passwordObj1.focus();
+            passwordObj1.blur();
+
+            emailObj.focus();
+            emailObj.blur();
+
+            // 当所表单项都是合法的时候,提交表单
+            if (usernameError.innerText == "" && passwordError.innerText == "" && passwordError1.innerText == "" && emailError.innerText == "") {
+                // 获取表单对象
+                var formObj = document.getElementById("form");
+                // 可以在这里设置action,也可以不在这里.
+                // formObj.action = "http://localhost:8080/jd/save";
+                // 提交表单
+                formObj.submit();
+            }
+
+        }
+
+    }
+</script>
+<form action="http://localhost:8080" method="post" id="form">
+    <table align="center">
+        <tr>
+            <th colspan="2">用户登录界面</th>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td>H &nbsp;C &nbsp;I</td>
+            <td><input type="text" name="username" id="username"/>&nbsp;&nbsp;<span id="error"></span></td>
+        </tr>
+        <tr>
+            <td>xu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pt1</td>
+            <td><input type="password" name="userpwd" id="password"/>&nbsp;&nbsp;<span id="error1"></span></td>
+        </tr>
+        <tr>
+            <td>xupt2</td>
+            <td><input type="password" id="password1"/>&nbsp;&nbsp;<span id="error2"></span></td>
+        </tr>
+        <!-- <tr>
+            <td>邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</td>
+            <td><input type="text" name="email" id="email"/>&nbsp;&nbsp;<span id="error3"></span></td>
+        </tr> -->
+        <tr>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" id="btn1" value="登录" onclick="return check"/>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>
